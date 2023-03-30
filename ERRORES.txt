@@ -1,0 +1,67 @@
+CLASE Directory:
+
+-Principio de Responsabilidad Única (SRP): Parece tener demasiadas responsabilidades, como manipular la
+lista de archivos y también proporcionar métodospara operaciones de archivo. Es mejor dividir estas
+responsabilidades en clases separadas.
+
+-Principio Abierto/Cerrado (OCP):
+La clase no está cerrada para la extensión, ya que no proporciona ningún método para agregar nuevas
+funcionalidades o comportamientos. Si deseamos agregar un nuevo comportamiento para la clase Directory, tendremos
+que modificar la clase existente.
+
+-Principio de Sustitución de Liskov (LSP):
+La clase implementa la interfaz FileSystemItem y, por lo tanto, se espera que la clase Directory se pueda
+utilizar en lugar de la interfaz. Sin embargo, algunos métodos de la interfaz FileSystemItem no tienen sentido
+para la clase Directory, como getExtension(), open(), setPosition(), read(), write(), close().
+
+CLASE File:
+
+-Principio de Responsabilidad Única (SRP):
+La clase File tiene varias responsabilidades, como la manipulación de archivos y la conversión de formatos.
+Se podría dividir esta clase en dos, una que maneje la manipulación de archivos y otra que se encargue
+de las conversiones de formato. De esta manera, cada clase tendría una única responsabilidad.
+
+-Principio Abierto/Cerrado (OCP):
+La clase File no es extensible, ya que todas sus operaciones están definidas en la propia clase y no
+puede ser extendida para incluir nuevas operaciones o comportamientos.
+
+-Principio de Sustitución de Liskov (LSP):
+La clase File implementa la interfaz FileSystemItem, pero no implementa correctamente todos los métodos de la interfaz.
+Por ejemplo, el método listFiles() no es válido para ficheros, pero en lugar de arrojar una excepción,
+la implementación simplemente arroja una excepción de operación no válida. En este caso, se podría definir
+una nueva interfaz para los archivos, InterfaceFile, y la clase File implementaría esa nueva interfaz en lugar de la interfaz
+FileSystemItem. De esta manera, se aseguraría que todas las clases que implementen la interfaz de archivos
+tendrían una implementación correcta de los métodos requeridos.
+
+INTERFAZ FileSystemItem:
+
+-Principio de Responsabilidad Única (SRP):
+La interfaz FileSystemItem viola el principio SRP porque tiene demasiadas responsabilidades. En particular,
+tiene métodos para representar tanto archivos como directorios, y también tiene métodos para leer y escribir datos.
+
+-Principio Abierto/Cerrado (OCP):
+La interfaz FileSystemItem no cumple con el principio OCP porque no es fácilmente extensible para añadir
+nuevas funcionalidades sin modificar el código existente.
+
+-Principio de Segregación de la interfaz (ISP):
+La interfaz FileSystemItem viola el principio ISP porque obliga a las clases que la implementan a
+proporcionar implementaciones para métodos que pueden no ser relevantes para ellas. Por ejemplo, un archivo no tendría un método listFiles().
+
+-Principio de Inversión de Dependencia (DIP):
+La interfaz FileSystemItem viola el principio DIP porque las clases que la implementan dependen directamente de ella.
+Esto hace que las clases sean difíciles de probar y hace que sea difícil cambiar la implementación en el futuro.
+
+CLASE FileManager:
+
+Principio de Responsabilidad Única (SRP):
+El método calculateSize tiene dos responsabilidades diferentes: calcular el tamaño de un objeto FileSystemItem y
+calcular el tamaño de una lista de FileSystemItem.
+
+Principio Abierto/Cerrado (OCP): La clase FileManager no está cerrada para la modificación, ya que si se desea
+agregar otro tipo de FileSystemItem, como un enlace simbólico, se tendría que modificar el código existente.
+
+Principio de Sustitución de Liskov (LSP):
+En el método calculateSize, se utiliza una instancia de la clase Directory y se accede a su lista de archivos a
+través del método listFiles. Esto puede provocar un comportamiento no esperado si se pasa una subclase de Directory
+que no tenga una lista de archivos o que tenga una lista de archivos que no se puede acceder mediante el método
+listFiles.
